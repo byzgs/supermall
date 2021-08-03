@@ -4,20 +4,49 @@
   --color-text: #666;
   --color-high-text: #ff5777;
   --color-tint: #ff8198;
+  --color-fff: #ffffff;
   --color-background: #ff8198;
   --fontsize: 14px;
   --line-height: 1.5;
 }
 
-::before,
-::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
 }
-p {
-  color: #ff5777;
-  /* 家里第一次修改 */
-  background-color: #ff5777;
-  /* 家里第二次修改 */
+
+a
+body {
+  font-family: 'PingFang SC',Arial, Helvetica, sans-serif;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--color-background);
+  color: var(--color-text);
+  width: 100vw;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+.clear-fix::after {
+  clear: both;
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+.clear-fix {
+  zoom: 1;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
 }
