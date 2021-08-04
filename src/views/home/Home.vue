@@ -3,19 +3,99 @@
     <nav-bar class="home-nav"><div slot="center">购物车</div></nav-bar>
     <home-swiper :banners="banners"/>
     <home-recommend-view :recommends="recommends"/>
+    <feature-view /> 
+    <tab-control :tittles="['流行','新款','精选']" class="tab-control" />
+    <ol>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>a</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+      <li>'a'</li>
+    </ol>
   </div>
 </template>
 
 <script>
+import HomeSwiper from "./childComps/HomeSwiper";
+import HomeRecommendView from "./childComps/HomeRecommendView";
+import FeatureView from "./childComps/FeatureView"
+
 import NavBar from "components/common/navbar/NavBar";
-import HomeSwiper from "./childComps/HomeSwiper"
-import HomeRecommendView from "./childComps/HomeRecommendView"
+import TabControl from 'components/content/tabControl/TabControl';
+
 import { getHomeMultidata } from "network/home";
 export default {
   components: {
-    NavBar,
     HomeSwiper,
-    HomeRecommendView
+    HomeRecommendView,
+    FeatureView,
+    NavBar,
+    TabControl
   },
   data() {
     return {
@@ -25,23 +105,9 @@ export default {
       keywords: [],
     };
   },
-  // mounted() {
-  //   const mySwiper = new Swiper(".swiper01", {
-  //     observer: true,
-  //     autoplay: true,
-  //     loop: true,
-  //   });
-  // },
+  
   methods: {
-    // _initSwiper() {
-    //   var mySwiper = new Swiper('.swiper-container',{
-    //     direction: 'horizontal',
-    //     loop: true,
-    //     pagination: {
-    //       el: '.swiper-pageination',
-    //     }
-    //   })
-    // }
+    
   },
   created() {
     //1.请求多个数据
@@ -60,9 +126,19 @@ export default {
 </script>
 
 <style>
+#home {
+  padding-top: 44px;
+}
 .home-nav {
   background-color: var(--color-tint);
   color: var(--color-fff);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
 }
-
+.tab-control {
+  position: sticky;
+  top: 44px;
+}
 </style>
