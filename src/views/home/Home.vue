@@ -96,9 +96,16 @@ export default {
           this.currentType = "sell";
           break;
       }
-      this.$refs.tabControl1.currentIndex = index;
-      this.$refs.tabControl2.currentIndex = index;
-      this.isTabFixed = this.isTabFixed
+      //点tabbar2不滚动
+        if(this.$refs.tabControl2.currentIndex != index) {
+          this.$refs.scroll.scrollTo(0, -this.tabOffsetTop, 0);
+        }
+        this.$refs.tabControl1.currentIndex = index;
+        this.$refs.tabControl2.currentIndex = index;
+        // this.isTabFixed = this.isTabFixed
+        
+        
+      
     },
     backClick() {
       this.$refs.scroll.scrollTo(0, 0, 500);
@@ -169,9 +176,9 @@ export default {
   },
   mounted() {
     //1.监听item中图片加载完成并且refresh重新设置可滚动高度
-    const debounceRefresh = debounce(this.$refs.scroll.refresh, 500);
+    let debounceRefresh = debounce(this.$refs.scroll.refresh, 500);
     this.$bus.$on("itemImageLoad", () => {
-      debounceRefresh(20,20,'abc');
+      debounceRefresh();
     });
     //2.获取tabControl的offsetTop
     // this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop

@@ -1,6 +1,6 @@
 <template>
   <div id="detail">
-   <detail-nav-bar class="detail-nav"/>
+   <detail-nav-bar class="detail-nav" @titleClick='titleClick'/>
    <scroll class="content" ref="detailscroll">
      <detail-swiper :top-images='topImages'/>
      <detail-base-info :goods='goods'/>
@@ -26,6 +26,7 @@ import GoodsList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
 
 import { getDetail,GoodsInfo,Shop,GoodsParam,getRecommend } from 'network/detail'
+import { debounce } from "common/utils";
 export default {
   name: "Detail",
   data() {
@@ -37,7 +38,8 @@ export default {
       detailInfo: {},
       paramInfo: {},
       commentInfo: {},
-      recommends: []
+      recommends: [],
+      themeTopYs: [0,1000,2000,3000]
     }
   },
   components: {
@@ -55,6 +57,9 @@ export default {
     //监听底下图片加载完了，给scroll高度
     imageLoad() {
       this.$refs.detailscroll.refesh()
+    },
+    titleClick(index) {
+      this.$refs.detailscroll.scrollTo(0, -this.themeTopYs[index],200)
     }
   },
   // created() {
@@ -97,6 +102,13 @@ export default {
   //     // console.log(this.recommends);
   //   })
   // },
+  mounted() {
+    //1.监听item中图片加载完成并且refresh重新设置可滚动高度
+    let debounceRefresh = debounce(this.$refs.detailscroll.refresh, 500);
+    this.$bus.$on("itemImageLoad", () => {
+      debounceRefresh();
+    });
+  },
   activated() {
     // this.$refs.detailScroll.refesh()
     //保存传入的iid
@@ -136,6 +148,10 @@ export default {
       this.recommends = res.data.data.list
       // console.log(this.recommends);
     })
+  },
+  deactived() {
+    this.iid = null
+    console.log('不活跃了');
   },
   destroyed() {
     this.iid = null
