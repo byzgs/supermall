@@ -27,7 +27,7 @@
       <goods-list :goods="showGoods" />
     </scroll>
 
-    <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <back-top @click.native="backClick" v-show="isShowBackTop" style="bottom: 41px;"/>
   </div>
 </template>
 

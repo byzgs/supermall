@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-
+import store from './store'
 // import vueSwiper from 'vue-awesome-swiper';
 // import 'assets/css/swiper-bundle.css';
 // Vue.use(vueSwiper)
@@ -13,5 +13,6 @@ Vue.prototype.$bus = new Vue()
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')
