@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-   <detail-nav-bar class="detail-nav" @titleClick='titleClick'/>
-   <scroll class="content" ref="detailscroll">
+   <detail-nav-bar class="detail-nav" ref="detailNavBar" @titleClick='titleClick'/>
+   <scroll class="content" ref="detailscroll" :probe-type="3" @scroll="contentScroll">
      <detail-swiper :top-images='topImages'/>
      <detail-base-info :goods='goods'/>
      <detail-shop-info :shop='shop'/>
      <detail-goods-info :detail-info='detailInfo' @imageLoad='imageLoad'/>
-     <detail-param-info :paramInfo='paramInfo'/>
-     <detail-comment-info :commentInfo='commentInfo'/>
-     <goods-list :goods='recommends'/>
+     <detail-param-info ref="params" :paramInfo='paramInfo'/>
+     <detail-comment-info ref="comment" :commentInfo='commentInfo'/>
+     <goods-list ref="recommend" :goods='recommends'/>
    </scroll>
   </div>
 </template>
@@ -39,7 +39,9 @@ export default {
       paramInfo: {},
       commentInfo: {},
       recommends: [],
-      themeTopYs: [0,1000,2000,3000]
+      themeTopYs: [],
+      getThemeTopYs: null,
+      detailNavBarIndex: 0
     }
   },
   components: {
@@ -56,14 +58,31 @@ export default {
   methods: {
     //监听底下图片加载完了，给scroll高度
     imageLoad() {
-      this.$refs.detailscroll.refesh()
+      this.$refs.detailscroll.refresh() 
+
+      this.themeTopYs = [];
+      this.themeTopYs.push(0);
+      this.themeTopYs.push(this.$refs.params.$el.offsetTop);
+      this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+      this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+    },
+    contentScroll(position) {
+      const positionY = -position.y
+      let length = this.themeTopYs.length
+      for(let i = 0;i < length; i++) {
+        if(this.detailNavBarIndex !== i && ((i < length -1 && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1]) || (i === length - 1 && positionY >= this.themeTopYs[i]))) {
+          this.detailNavBarIndex = i
+          this.$refs.detailNavBar.currentIndex = this.detailNavBarIndex
+        }
+      }
+      // console.log(this.detailNavBarIndex);
     },
     titleClick(index) {
       this.$refs.detailscroll.scrollTo(0, -this.themeTopYs[index],200)
     }
   },
   // created() {
-  // // this.$refs.detailScroll.refesh()
+  // // this.$refs.detailScroll.refresh()
   //   //保存传入的iid
   //   this.iid = this.$route.params.iid
   //   //根据iid请求详情数据
@@ -102,21 +121,35 @@ export default {
   //     // console.log(this.recommends);
   //   })
   // },
+  created() {
+    // //也可以这样给getThemeTopYs赋值
+    // this.getThemeTopYs = debounce(() => {
+    //   this.themeTopYs = [];
+    //   this.themeTopYs.push(0);
+    //   this.themeTopYs.push(this.$refs.params.$el.offsetTop);
+    //   this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+    //   this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+    //   console.log(this.themeTopYs);
+    // },200)
+  },
   mounted() {
     //1.监听item中图片加载完成并且refresh重新设置可滚动高度
     let debounceRefresh = debounce(this.$refs.detailscroll.refresh, 500);
     this.$bus.$on("itemImageLoad", () => {
       debounceRefresh();
     });
+
   },
   activated() {
-    // this.$refs.detailScroll.refesh()
+    // this.$refs.detailScroll.refresh()
     //保存传入的iid
     this.iid = this.$route.params.iid
     //根据iid请求详情数据
     getDetail(this.iid).then(res => {
       const data = res.data.result
 
+      //0.确保一进来在最上面
+      this.$refs.detailscroll.scrollTo(0, 0, 0)
       //1.获取顶部的图片轮播数据
       this.topImages = data.itemInfo.topImages
 
@@ -142,6 +175,20 @@ export default {
       if(data.rate.cRate !== 0) {
         this.commentInfo = data.rate.list[0]
       }
+
+      // this.$nextTick(() => {
+      //   //图片还没加载完 offsettop不包含图片
+      //   //值不对
+      //   if(this.themeTopYs != []) {
+      //     this.themeTopYs = []
+      //   }
+      //     this.themeTopYs.push(0);
+      //     this.themeTopYs.push(this.$refs.params.$el.offsetTop);
+      //     this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+      //     this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+        
+      //   console.log(this.themeTopYs);
+      // })
     })
     //请求推荐数据
     getRecommend().then(res => {
@@ -181,5 +228,4 @@ export default {
 .content {
   height: calc(100% - 44px);
 }
-
 </style>

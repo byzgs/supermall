@@ -11,6 +11,7 @@ import BScroll from "better-scroll"
 export default {
 name: 'Scroll',
 props: {
+  //默认是0就不能实时监听位置啦！要3
   probeType: {
     type: Number,
     default: 0

@@ -24,6 +24,7 @@ data() {
     currentIndex: 0
   }
 },
+
 methods: {
   titleClick(index) {
     this.currentIndex = index
@@ -32,6 +33,10 @@ methods: {
   backClick() {
     this.$router.back()
   }
+},
+deactivated() {
+  //退出详情页后置0
+  this.currentIndex = 0
 }
 }
 </script>
