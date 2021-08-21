@@ -99,6 +99,7 @@ export default {
       //点tabbar2不滚动
         if(this.$refs.tabControl2.currentIndex != index) {
           this.$refs.scroll.scrollTo(0, -this.tabOffsetTop, 0);
+          //把懒加载的图片更换一下
         }
         this.$refs.tabControl1.currentIndex = index;
         this.$refs.tabControl2.currentIndex = index;
@@ -122,6 +123,7 @@ export default {
       //手动加一个加载后重新计算可滚动区域的高度，
       //避免网速慢图片加载不出来，设置高度出错
       this.$refs.scroll.refresh();
+      this.$toast.show('上拉加载更多')
     },
     swiperImageLoad() {
       
@@ -153,6 +155,7 @@ export default {
         this.goods[type].page += 1;
         //完成了上拉加载更多之后要重置
         this.$refs.scroll.finishPullUp();
+
       });
     },
     //防抖函数！封装在了utils.js里，如果没封装，用的时候this.debounce

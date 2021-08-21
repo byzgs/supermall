@@ -140,9 +140,12 @@ export default {
       //--> 搭配mutations,commit
       // this.$store.commit('addCart',product)
       this.$store.dispatch("addCart", product).then(res => {
-        console.log(res);
+        this.$toast.show(res)
       })
     },
+    //收藏
+    
+    //购买
   },
   mounted() {
     //1.监听item中图片加载完成并且refresh重新设置可滚动高度
